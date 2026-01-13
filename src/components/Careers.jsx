@@ -1,6 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+const departments = [
+  { 
+    title: "Software Engineering", 
+    roles: 12,
+    positions: ['Autonomy Engineer', 'Backend Systems', 'ML/AI Specialist', 'DevSecOps'],
+    description: 'Build the cognitive layer of autonomous systems with Nexus OS.'
+  },
+  { 
+    title: "Autonomous Systems", 
+    roles: 8,
+    positions: ['Robotics Engineer', 'Perception Lead', 'Motion Planning', 'Simulation'],
+    description: 'Design and deploy intelligent platforms across all domains.'
+  },
+  { 
+    title: "Hardware Design", 
+    roles: 5,
+    positions: ['Aerospace Engineer', 'Electrical Systems', 'Propulsion Lead'],
+    description: 'Engineer the physical platforms that define modern warfare.'
+  },
+  { 
+    title: "Field Operations", 
+    roles: 4,
+    positions: ['Flight Operations', 'Systems Integration', 'Field Service'],
+    description: 'Deploy and maintain systems in real-world operational environments.'
+  }
+];
+
+const benefits = [
+  { icon: '🏥', title: 'Healthcare', desc: 'Comprehensive medical, dental, vision' },
+  { icon: '📈', title: '401(k) Match', desc: 'Up to 6% employer contribution' },
+  { icon: '🎖️', title: 'Veteran Support', desc: 'Dedicated transition programs' },
+  { icon: '📚', title: 'Learning', desc: '$10K annual education stipend' },
+];
 
 export default function Careers() {
+  const [selectedDept, setSelectedDept] = useState(null);
+  const [showApplication, setShowApplication] = useState(false);
+
   return (
     <section id="careers" className="py-24 bg-zinc-900 text-white relative overflow-hidden">
       {/* Background Image/Texure overlay */}
@@ -21,30 +58,108 @@ export default function Careers() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="px-8 py-4 bg-cyan-600 hover:bg-cyan-500 text-white font-bold uppercase tracking-widest transition-colors rounded-sm">
+            <button 
+              onClick={() => setShowApplication(!showApplication)}
+              className="px-8 py-4 bg-cyan-600 hover:bg-cyan-500 text-white font-bold uppercase tracking-widest transition-colors rounded-sm"
+            >
               View Open Roles
             </button>
-            <button className="px-8 py-4 bg-transparent border border-white/20 hover:border-white/50 text-white font-bold uppercase tracking-widest transition-colors rounded-sm backdrop-blur-sm">
+            <a 
+              href="#company"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('company')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="px-8 py-4 bg-transparent border border-white/20 hover:border-white/50 text-white font-bold uppercase tracking-widest transition-colors rounded-sm backdrop-blur-sm text-center"
+            >
               Life at Absolut
-            </button>
+            </a>
           </div>
         </div>
 
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-                { title: "Software Engineering", roles: 12 },
-                { title: "Autonomous Systems", roles: 8 },
-                { title: "Hardware Design", roles: 5 }
-            ].map((dept, i) => (
-                <div key={i} className="border-t border-zinc-800 pt-6 group cursor-pointer hover:border-cyan-500/50 transition-colors">
-                    <h3 className="text-xl font-bold font-mono mb-2 group-hover:text-cyan-400 transition-colors">{dept.title}</h3>
-                    <div className="flex justify-between items-center text-zinc-500 text-sm">
-                        <span>{dept.roles} Open Positions</span>
-                        <span className="group-hover:translate-x-2 transition-transform">&rarr;</span>
-                    </div>
-                </div>
-            ))}
+        {/* Benefits Grid */}
+        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
+          {benefits.map((benefit, i) => (
+            <div key={i} className="bg-zinc-800/50 border border-zinc-700 p-4 text-center backdrop-blur-sm">
+              <div className="text-2xl mb-2">{benefit.icon}</div>
+              <div className="font-mono text-sm font-bold text-white">{benefit.title}</div>
+              <div className="text-xs text-zinc-400 mt-1">{benefit.desc}</div>
+            </div>
+          ))}
         </div>
+
+        {/* Departments Grid */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {departments.map((dept, i) => (
+            <div 
+              key={i} 
+              className={`border p-6 group cursor-pointer transition-all ${
+                selectedDept === i 
+                  ? 'border-cyan-500 bg-cyan-500/10' 
+                  : 'border-zinc-800 hover:border-zinc-600 bg-zinc-800/30'
+              }`}
+              onClick={() => setSelectedDept(selectedDept === i ? null : i)}
+            >
+              <h3 className={`text-lg font-bold font-mono mb-2 transition-colors ${
+                selectedDept === i ? 'text-cyan-400' : 'group-hover:text-cyan-400'
+              }`}>
+                {dept.title}
+              </h3>
+              <div className="flex justify-between items-center text-zinc-500 text-sm mb-3">
+                <span>{dept.roles} Open Positions</span>
+                <span className={`transition-transform ${selectedDept === i ? 'rotate-180' : ''}`}>
+                  ▼
+                </span>
+              </div>
+              
+              {selectedDept === i && (
+                <div className="pt-3 border-t border-zinc-700 animate-fadeIn">
+                  <p className="text-xs text-zinc-400 mb-3">{dept.description}</p>
+                  <div className="space-y-1">
+                    {dept.positions.map((pos, j) => (
+                      <div key={j} className="flex items-center gap-2 text-xs">
+                        <div className="w-1 h-1 bg-cyan-500 rounded-full"></div>
+                        <span className="text-zinc-300">{pos}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Application Modal Trigger */}
+        {showApplication && (
+          <div className="mt-8 p-6 bg-zinc-800 border border-zinc-700">
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="text-lg font-bold font-mono">Apply Now</h4>
+              <button 
+                onClick={() => setShowApplication(false)}
+                className="text-zinc-400 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+            <p className="text-sm text-zinc-400 mb-4">
+              Ready to join the mission? Submit your application to careers@absolutdefense.com or explore our open positions.
+            </p>
+            <div className="flex gap-4">
+              <a 
+                href="mailto:careers@absolutdefense.com"
+                className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-mono uppercase tracking-wider transition-colors"
+              >
+                Email Resume
+              </a>
+              <button 
+                onClick={() => setShowApplication(false)}
+                className="px-4 py-2 border border-zinc-600 hover:border-zinc-400 text-zinc-300 text-sm font-mono uppercase tracking-wider transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

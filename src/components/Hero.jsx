@@ -1,6 +1,14 @@
 import React from 'react';
 
 export default function Hero() {
+  const handleScrollTo = (e, targetId) => {
+    e.preventDefault();
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="relative pt-16 pb-32 flex content-center items-center justify-center min-h-[90vh] overflow-hidden">
       {/* Background Grid Visualization */}
@@ -22,13 +30,21 @@ export default function Hero() {
         <p className="mt-4 max-w-2xl mx-auto text-xl text-zinc-600 dark:text-zinc-400 font-light leading-relaxed">
           Absolut Defense Systems integrates advanced AI, kinetic platforms, and realtime sensor fusion to redefine the modern battlespace.
         </p>
-        <div className="mt-10 flex justify-center gap-6">
-          <button className="px-8 py-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold uppercase tracking-widest hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all border border-transparent">
-             Mission Profiles
-          </button>
-           <button className="px-8 py-4 bg-transparent border border-zinc-900 dark:border-white text-zinc-900 dark:text-white font-bold uppercase tracking-widest hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all">
-             Our Technology
-          </button>
+        <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
+          <a 
+            href="#platforms"
+            onClick={(e) => handleScrollTo(e, 'platforms')}
+            className="px-8 py-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold uppercase tracking-widest hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all border border-transparent cursor-pointer"
+          >
+             Mission Platforms
+          </a>
+          <a 
+            href="#software"
+            onClick={(e) => handleScrollTo(e, 'software')}
+            className="px-8 py-4 bg-transparent border border-zinc-900 dark:border-white text-zinc-900 dark:text-white font-bold uppercase tracking-widest hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer"
+          >
+             Nexus OS
+          </a>
         </div>
       </div>
       
